@@ -23,13 +23,13 @@ SQL> Insert into EMP2728 values(1018,'Chandu','DBA','Anki','01-May-81',1000,1000
 
 
 Display:
-select * from EMP27;
+select * from EMP2728;
 
 Others:
-select * from EMP27 where EMPNO=7369;
-select * from EMP27 where HIREDATE='01-May-81';
-select ENAME from EMP27 where SAL>1500;
-select ENAME from EMP27 where COMM is NULL;
-select * from EMP27 where ENAME like 'A%';
-alter table EMP27 Modify JOB Char(20);
-alter table EMP27 drop column PHONE;
+select * from EMP2728 where EMPNO=7369;
+select * from EMP2728 where HIREDATE='01-May-81';
+select ENAME from EMP2728 where SAL>1500;
+select ENAME from EMP2728 where COMM is NULL;
+select * from EMP2728 where ENAME like 'A%';
+alter table EMP2728 Modify JOB Char(20);
+alter table EMP2728 drop column PHONE;

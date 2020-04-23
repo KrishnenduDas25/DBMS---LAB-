@@ -1,0 +1,90 @@
+Create Customer table:
+
+create table Customer(Cust_id Number(5) Primary Key,
+check(Cust_id>99 and Cust_id<=10000),
+Cust_name Varchar2(30),
+Annual_Revenue Number(7),
+Cust_type Varchar2(15),
+check(Cust_type in ('Manufacturer','Wholesaler','Retailer')));
+
+Create Truck table:
+
+create table Truck(Truck_no Number(5) Primary Key,
+Driver_name Varchar2(30));
+
+Create City table:
+
+create table City(City_name Varchar2(20) Primary Key,
+Population Number(9));
+
+Create Shipment table:
+
+create table Shipment(Shipment_no Number(5),
+Cust_id Number(5),
+Weight Number(5),
+Truck_no Number(5),
+Destination Varchar2(20),
+Ship_date Date,
+constraint c3 Primary Key (Shipment_no, Cust_id),
+constraint c1 foreign key (Truck_no) references Truck(Truck_no) on delete cascade,
+constraint c2 foreign key (Destination) references City(City_name) on delete set NULL);
+
+Insert in Customer table:
+
+insert into Customer values(120,'Pihu',15000,'Retailer');
+insert into Customer values(150,'Anki',25000,'Retailer');
+insert into Customer values(200,'Avi',30000,'Manufacturer');
+insert into Customer values(300,'Subho',20000,'Wholesaler');
+insert into Customer values(500,'Rina',50000,'Manufacturer');
+
+Insert in Truck table:
+
+insert into Truck values(600,'Iqbal');
+insert into Truck values(605,'Golu');
+insert into Truck values(610,'Bhim');
+
+Insert in City table:
+
+insert into City values('Kolkata',200000);
+insert into City values('Mumbai',2500000);
+insert into City values('Bangalore',1500000);
+insert into City values('Chennai',50000);
+
+Insert in Shipment table:
+
+insert into Shipment values(1,120,100,600,'Bangalore','12-Jan-17');
+insert into Shipment values(2,120,200,600,'Mumbai','14-Jan-17');
+insert into Shipment values(3,120,250,605,'Chennai','15-Jan-17');
+insert into Shipment values(4,120,10,610,'Kolkata','18-Jan-17');
+insert into Shipment values(5,150,450,600,'Bangalore','12-Jan-17');
+insert into Shipment values(6,200,100,610,'Mumbai','2-Jan-17');
+insert into Shipment values(7,300,40,610,'Chennai','15-Jan-17');
+insert into Shipment values(8,500,100,610,'Bangalore','25-Jan-17');
+insert into Shipment values(9,200,100,610,'Bangalore','25-Jan-17');
+insert into Shipment values(10,300,100,610,'Bangalore','25-Jan-17');
+
+
+QUERIES:
+
+select Distinct cust_name from Customer,Shipment where Destination IN ('Kolkata','Mumbai','Chennai') and Customer.Cust_id=Shipment.Cust_id;
+
+select Distinct driver_name from Truck,Shipment where weight>200 and Truck.Truck_no=Shipment.Truck_no;
+
+select max(Weight) as Max_Weight,min(Weight) as Min_Weight from Shipment;
+
+select cust_id,avg(weight) from Shipment group by Cust_id;
+
+select distinct city_name,population from City,Shipment where weight>=100 and City.City_name=Shipment.Destination; 
+
+select destination from Shipment group by destination having count(distinct Cust_id)=(select count(*) from Customer);
+
+select Destination,max(weight) from Shipment group by destination;
+
+select distinct cust_name,annual_revenue from Customer,Shipment,Truck 
+where driver_name like 'Iqbal' 
+and Customer.Cust_id=Shipment.Cust_id 
+and Truck.Truck_no=Shipment.Truck_no; 
+
+select driver_name from Truck where Truck_no=(select truck_no from Shipment group by truck_no having count(distinct destination)=(select count(*) from City));
+
+select destination,min(weight) from Shipment group by Destination;
